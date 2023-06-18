@@ -17,9 +17,29 @@ const pieces = {
   empty:-1
 }
 
+p1=[-1,-1];
+p2=[-1,-1];
+firstMoveMade=false;
+
 const boardStart = [[pieces.wR,pieces.wN,pieces.wB,pieces.wK,pieces.wQ,pieces.wB,pieces.wN,pieces.wR],[pieces.wP,pieces.wP,pieces.wP,pieces.wP,pieces.wP,pieces.wP,pieces.wP,pieces.wP],
 [pieces.empty,pieces.empty,pieces.empty,pieces.empty,pieces.empty,pieces.empty,pieces.empty,pieces.empty],[pieces.empty,pieces.empty,pieces.empty,pieces.empty,pieces.empty,pieces.empty,pieces.empty,pieces.empty],[pieces.empty,pieces.empty,pieces.empty,pieces.empty,pieces.empty,pieces.empty,pieces.empty,pieces.empty],[pieces.empty,pieces.empty,pieces.empty,pieces.empty,pieces.empty,pieces.empty,pieces.empty,pieces.empty],
 [pieces.bP,pieces.bP,pieces.bP,pieces.bP,pieces.bP,pieces.bP,pieces.bP,pieces.bP],[pieces.bR,pieces.bN,pieces.bB,pieces.bK,pieces.bQ,pieces.bB,pieces.bN,pieces.bR]];
+
+for (let i = 0; i < 8; i++) {
+  for (let j = 0; j < 8; j++) {
+    const square = document.createElement("body");
+    square.className = (i + j) % 2 === 0 ? "square white" : "square black";
+
+    square.addEventListener("click",
+        function(){
+          move(i,j),false;
+        }
+      );
+    
+      chessboard[i].push(square);
+    board.appendChild(square);
+  }
+}
 
 function resetBoard(){
   for (let i = 0; i < 8; i++) {
@@ -27,7 +47,6 @@ function resetBoard(){
       pieceLocation[i][j]=boardStart[i][j];
     }
   }
-  console.log(pieceLocation);
 }
 
 function updateBoard() {
@@ -72,19 +91,38 @@ function updateBoard() {
         break;
 
         default:
-          chessboard[i][j].innerHTML="";
+          chessboard[i][j].innerHTML=" ";
       }
     }
   }
 };
 
-for (let i = 0; i < 8; i++) {
-  for (let j = 0; j < 8; j++) {
-    const square = document.createElement("body");
-    square.className = (i + j) % 2 === 0 ? "square white" : "square black";
-    chessboard[i].push(square);
-    board.appendChild(square);
+function move(i,j){
+  console.log("entered func")
+  if(firstMoveMade!=true){
+    console.log("entered first if")
+    p1[0]=i;
+    p1[1]=j;
+    firstMoveMade=true;
+    console.log([p1]);
+  }else{
+    p2[0]=i;
+    p2[1]=j;
+
+    console.log("entered second if");
+    console.log(pieceLocation[i][j]);
+
+    if(validMove){
+      pieceLocation[p2[0]][p2[1]]=pieceLocation[p1[0]][p1[1]];
+      pieceLocation[p1[0]][p1[1]]=pieces.empty;
+    }
+    firstMoveMade=false;
+    updateBoard();
   }
+}
+
+function validMove(){
+  return true;
 }
 resetBoard();
 updateBoard();
