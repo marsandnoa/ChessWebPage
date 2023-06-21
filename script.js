@@ -105,8 +105,7 @@ function move(i,j){
   }else{
     p2[0]=i;
     p2[1]=j;
-
-    if(validMove()){
+    if(validMove()&&validMovePiece(pieceLocation[p1[0]][p1[1]])){
       pieceLocation[p2[0]][p2[1]]=pieceLocation[p1[0]][p1[1]];
       pieceLocation[p1[0]][p1[1]]=pieces.empty;
     }
@@ -119,7 +118,6 @@ function validMove(){
   //if its a white piece
 
   if(pieceLocation[p1[0]][p1[1]]<6){
-    console.log(pieceLocation[p1[0]][p1[1]]<6);
     //if its a white piece, the second position must be either be empty or black
     if(pieceLocation[p2[0]][p2[1]]<6&&pieceLocation[p2[0]][p2[1]]!=pieces.empty){
       return false;
@@ -132,110 +130,98 @@ function validMove(){
     return false;
     }
   }
-
-  switch(pieceLocation[p1[0]][p1[1]]){
-    case pieces.wR:
-      if(p1[0]==p2[0]){
-        if(p1[1]>p2[1]){
-          for(i=p1[1];i>p2[1];i--){
-            if(pieceLocation[p1[0]][i]!=pieces.empty){
-              return false;
+  return true;
+}
+  function validMovePiece(pieceType){
+    switch(pieceType){
+      case pieces.wR||pieces.bR:
+        //if horizontal movement
+        if(p1[0]==p2[0]){
+          //if moving to the right
+          if(p1[1]>p2[1]){
+            for(i=p2[1]+1;i<p1[1];i++){
+              if(pieceLocation[p1[0]][i]!=pieces.empty){
+                console.log(pieceLocation[p1[0]][i]);
+                return false;
+              }
+            }
+          }else{
+            for(i=p2[1]-1;i>p1[1];i--){
+              if(pieceLocation[p1[0]][i]!=pieces.empty){
+                return false;
+              }
+            }
+          }
+        }else if(p1[1]==p2[1]){
+          if(p1[0]>p2[0]){
+            for(i=p2[0]+1;i<p1[0];i++){
+              if(pieceLocation[i][p1[1]]!=pieces.empty){
+                return false;
+              }
+            }
+          }else{
+            for(i=p2[0]-1;i>p1[0];i--){
+              if(pieceLocation[i][p1[1]]!=pieces.empty){
+                return false;
+              }
             }
           }
         }else{
-          for(i=p2[1];i>p1[1];i--){
-            if(pieceLocation[p1[0]][i]!=pieces.empty){
-              return false;
-            }
+          return false;
+        }
+        return true;
+        
+      case pieces.wN||pieces.bN:
+        if(p1[0]==p2[0]-2||(p1[0]==p2[0]+2)){
+          if(p1[1]==p2[1]-1||p1[1]==p2[1]+1){
+            return true;
           }
         }
-      }else{
-        if(p1[0]>p2[0]){
-          for(i=p1[0];i>p2[0];i--){
-            if(pieceLocation[i][p1[1]]!=pieces.empty){
-              return false;
-            }
+  
+        if(p1[1]==p2[1]-2||(p1[1]==p2[1]+2)){
+          if(p1[0]==p2[0]-1||p1[0]==p2[0]+1){
+            return true;
           }
+        }
+      return false;
+  
+      case pieces.wB||pieces.bB:
+        //if the change in columns is equal to the change in rows, return true
+        if(Math.abs(p2[0]-p1[0])==Math.abs(p2[1]-p1[1])){
+          return true;
         }else{
-          for(i=p2[0];i>p1[0];i--){
-            if(pieceLocation[i][p1[1]]!=pieces.empty){
-              return false;
-            }
+          return false;
+        }
+        return true;
+      case pieces.wK||pieces.bK:
+        if(p2[0]>=p1[0]-1&&p2[0]<=p1[0]+1){
+          if(p2[1]>=p1[1]-1&&p2[1]<=p1[1]+1){
+            return true;
           }
         }
-      }
-    return true;
-
-    case pieces.wN:
-      if(p1[0]==p2[0]-2||(p1[0]==p2[0]+2)){
-        if(p1[1]==p2[1]-1||p1[1]==p2[1]+1){
-          return true;
-        }
-      }
-
-      if(p1[1]==p2[1]-2||(p1[1]==p2[1]+2)){
-        if(p1[0]==p2[0]-1||p1[0]==p2[0]+1){
-          return true;
-        }
-      }
-    break;
-
-    case pieces.wB:
-    break;
-
-    case pieces.wK:
-    
-    break;
-
-    case pieces.wQ:
-    
-    break;
-
-    case pieces.wP:
-      return true;
-    break;
-
-    case pieces.bR:
-
-    break;
-
-    case pieces.bN:
-      if(p1[0]==p2[0]-2||(p1[0]==p2[0]+2)){
-        if(p1[1]==p2[1]-1||p1[1]==p2[1]+1){
-          return true;
-        }
-      }
-
-      if(p1[1]==p2[1]-2||(p1[1]==p2[1]+2)){
-        if(p1[0]==p2[0]-1||p1[0]==p2[0]+1){
-          return true;
-        }
-      }
-    break;
-
-    case pieces.bB:
-
-    break;
-
-    case pieces.bK:
-
-    break;
-
-    case pieces.bQ:
-
-    break;
-
-    case pieces.bP:
-      return true;
-    break;
-
-    case pieces.empty:
       return false;
-    break;
-
-    default:
+  
+      case pieces.wQ||pieces.bQ:
+        if(validMovePiece(pieces.bB)||validMovePiece(pieces.bR)){
+          return true;
+        }
       return false;
-  }
+  
+      case pieces.wP:
+        return true;
+      break;
+  
+      case pieces.bP:
+        return true;
+      break;
+  
+      case pieces.empty:
+        return false;
+      break;
+  
+      default:
+        return false;
+    }
 }
 
 function checkCheck(){
