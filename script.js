@@ -14,8 +14,13 @@ const pieces = {
   bK: 9,
   bQ: 10,
   bP: 11,
-  empty:-1
+  empty:'e'
 }
+const colors={
+  black:'black',
+  white:'white'
+}
+currentTurn=colors.white;
 
 p1=[-1,-1];
 p2=[-1,-1];
@@ -29,7 +34,8 @@ for (let i = 0; i < 8; i++) {
   for (let j = 0; j < 8; j++) {
     const square = document.createElement("body");
     square.className = (i + j) % 2 === 0 ? "square white" : "square black";
-
+    square.setAttribute("data-row", i);
+    square.setAttribute("data-col", j);
     square.addEventListener("click",
         function(){
           move(i,j),false;
@@ -54,40 +60,40 @@ function updateBoard() {
     for (let j = 0; j < 8; j++) {
       switch (pieceLocation[i][j]) {
         case pieces.wR:
-          chessboard[i][j].innerHTML="wR";
+          chessboard[i][j].innerHTML="♖";
         break;
         case pieces.wN:
-          chessboard[i][j].innerHTML="wN";
+          chessboard[i][j].innerHTML="♘";
         break;
         case pieces.wB:
-          chessboard[i][j].innerHTML="wB";
+          chessboard[i][j].innerHTML="♗";
         break;
         case pieces.wK:
-          chessboard[i][j].innerHTML="wK";
+          chessboard[i][j].innerHTML="♔";
         break;
         case pieces.wQ:
-          chessboard[i][j].innerHTML="wQ";
+          chessboard[i][j].innerHTML="♕";
         break;
         case pieces.wP:
-          chessboard[i][j].innerHTML="wP";
+          chessboard[i][j].innerHTML="♙";
         break;
         case pieces.bR:
-          chessboard[i][j].innerHTML="bR";
+          chessboard[i][j].innerHTML="♜";
         break;
         case pieces.bN:
-          chessboard[i][j].innerHTML="bN";
+          chessboard[i][j].innerHTML="♞";
         break;
         case pieces.bB:
-          chessboard[i][j].innerHTML="bB";
+          chessboard[i][j].innerHTML="♝";
         break;
         case pieces.bK:
-          chessboard[i][j].innerHTML="bK";
+          chessboard[i][j].innerHTML="♚";
         break;
         case pieces.bQ:
-          chessboard[i][j].innerHTML="bQ";
+          chessboard[i][j].innerHTML="♛";
         break;
         case pieces.bP:
-          chessboard[i][j].innerHTML="bP";
+          chessboard[i][j].innerHTML="♟";
         break;
 
         default:
@@ -101,13 +107,32 @@ function move(i,j){
   if(!firstMoveMade){
     p1[0]=i;
     p1[1]=j;
+
+    if(currentTurn!==getColor(pieceLocation[p1[0]][p1[1]])){
+      return;
+    }
+
+    const selectedSquareElement = document.querySelector(`[data-row="${i}"][data-col="${j}"]`);
+    selectedSquareElement.classList.add('highlight');
+
     firstMoveMade=true;
   }else{
+    chessboard.forEach(row => {
+      row.forEach(square => {
+        square.classList.remove('highlight');
+      });
+    });
+
     p2[0]=i;
     p2[1]=j;
     if(validMove()&&validMovePiece(pieceLocation[p1[0]][p1[1]])){
       pieceLocation[p2[0]][p2[1]]=pieceLocation[p1[0]][p1[1]];
       pieceLocation[p1[0]][p1[1]]=pieces.empty;
+      if(currentTurn==colors.white){
+        currentTurn=colors.black;
+      }else{
+        currentTurn=colors.white;
+      }
     }
     firstMoveMade=false;
     updateBoard();
@@ -115,22 +140,7 @@ function move(i,j){
 }
 
 function validMove(){
-  //if its a white piece
-
-  if(pieceLocation[p1[0]][p1[1]]<6){
-    //if its a white piece, the second position must be either be empty or black
-    if(pieceLocation[p2[0]][p2[1]]<6&&pieceLocation[p2[0]][p2[1]]!=pieces.empty){
-      return false;
-    }
-  }
-  //if its a black piece
-  if(pieceLocation[p1[0]][p1[1]]>5){
-    //if its a black piece, and the second position is not empty or white.
-    if(pieceLocation[p2[0]][p2[1]]>5){
-    return false;
-    }
-  }
-  return true;
+  return getColor(pieceLocation[p1[0]][p1[1]])!=getColor(pieceLocation[p2[0]][p2[1]])
 }
   function validMovePiece(pieceType){
     switch(pieceType){
@@ -223,7 +233,6 @@ function validMove(){
         }else{
           return false;
         }
-        return true;
       case pieces.wK:
       case pieces.bK:
         if(p2[0]>=p1[0]-1&&p2[0]<=p1[0]+1){
@@ -264,7 +273,6 @@ function validMove(){
             }
           }
         }
-        console.log(p2[0]);
         if(output&&p2[0]==7){
           pieceLocation[p1[0]][p1[1]]=pieces.wQ;
         }
@@ -301,15 +309,54 @@ function validMove(){
   
       case pieces.empty:
         return false;
-      break;
   
       default:
         return false;
     }
 }
 
-function checkCheck(){
-  return false;
+function getColor(piece) {
+  return piece === pieces.empty ? pieces.empty : piece < 6 ? colors.white : colors.black;
+}
+
+function isKingInCheck(color) {
+  if (color === colors.white) {
+    kingPiece = pieces.wK;
+    opposingColor = colors.black;
+  } else {
+    kingPiece = pieces.bK;
+    opposingColor = colors.white;
+  }
+
+  // Find the position of the king
+  kingPosition =[-1,-1];
+  for (let i = 0; i < 8; i++) {
+    for (let j = 0; j < 8; j++) {
+      if (pieceLocation[i][j] === kingPiece) {
+        kingPosition[0] = i;
+        kingPosition[1] = j;
+        break;
+      }
+    }
+  }
+
+  // Check if any opposing piece can attack the king
+  for (let i = 0; i < 8; i++) {
+    for (let j = 0; j < 8; j++) {
+      if (pieceLocation[i][j] !== pieces.empty && getColor(pieceLocation[i][j]) === opposingColor) {
+        // Check if the opposing piece can move to the king's position
+        p1[0] = i;
+        p1[1] = j;
+        p2[0] = kingPosition[0];
+        p2[1] = kingPosition[1];
+        if (validMovePiece(pieceLocation[i][j]) && validMove()) {
+          return true; // King is in check
+        }
+      }
+    }
+  }
+
+  return false; // King is not in check
 }
 resetBoard();
 updateBoard();

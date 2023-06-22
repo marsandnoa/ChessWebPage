@@ -1,30 +1,65 @@
 *{
-  padding: 0; 
   margin: 0;
+}
+
+.container {
+  display: flex;
+  justify-content: center;
+  position: relative;
+  margin: auto;
+}
+
+.header { 
+  width:980px;
+  height:50px;
+  margin:auto;
+  text-align: center;
+}
+.column{
+  float:left;
+  position: absolute;
+  top: 50px;
+  left: 0px;
 }
 .chessboard {
     width: 800px;
     height: 800px;
     display: flex;
     flex-wrap: wrap;
+    margin: auto;
   }
+.top{
+  width: 800px;
+  display: flex;
+  flex-wrap: wrap;
+  margin: auto;
+}
+  p{
+    width: 100px;
+    height: 100px;
+    box-sizing: border-box;
+    border: 1px solid black;
+    text-align: center;
 
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
   .square {
     width: 100px;
     height: 100px;
     box-sizing: border-box;
     border: 1px solid black;
     text-align: center;
+    font-size: 56px;
   }
-
+  .square.highlight {
+    background-color: red;
+  }
   .white {
     background-color: #f0d9b5;
   }
 
   .black {
     background-color: #b58863;
-  }
-
-  .img{
-    background-color: black;
   }
