@@ -134,7 +134,8 @@ function validMove(){
 }
   function validMovePiece(pieceType){
     switch(pieceType){
-      case pieces.wR||pieces.bR:
+      case pieces.wR:
+      case pieces.bR:
         //if horizontal movement
         if(p1[0]==p2[0]){
           //if moving to the right
@@ -171,7 +172,8 @@ function validMove(){
         }
         return true;
         
-      case pieces.wN||pieces.bN:
+      case pieces.wN:
+      case pieces.bN:
         if(p1[0]==p2[0]-2||(p1[0]==p2[0]+2)){
           if(p1[1]==p2[1]-1||p1[1]==p2[1]+1){
             return true;
@@ -185,15 +187,45 @@ function validMove(){
         }
       return false;
   
-      case pieces.wB||pieces.bB:
+      case pieces.wB:
+      case pieces.bB:
         //if the change in columns is equal to the change in rows, return true
         if(Math.abs(p2[0]-p1[0])==Math.abs(p2[1]-p1[1])){
+          if(p2[0]>p1[0]){
+            incrementX=-1;
+          }else{
+            incrementX=1;
+          }
+          if(p2[1]>p1[1]){
+            incrementY=-1;
+          }else{
+            incrementY=1;
+          }
+
+          while(p2[0]+incrementX!=p1[0]){
+            if(pieceLocation[p2[0]+incrementX][p2[1]+incrementY]!=pieces.empty){
+              return false;
+            }
+            if(incrementX>0){
+              incrementX++;
+            }else{
+              incrementX--;
+            }
+
+            if(incrementY>0){
+              incrementY++;
+            }else{
+              incrementY--;
+            }
+          }
+
           return true;
         }else{
           return false;
         }
         return true;
-      case pieces.wK||pieces.bK:
+      case pieces.wK:
+      case pieces.bK:
         if(p2[0]>=p1[0]-1&&p2[0]<=p1[0]+1){
           if(p2[1]>=p1[1]-1&&p2[1]<=p1[1]+1){
             return true;
@@ -201,19 +233,71 @@ function validMove(){
         }
       return false;
   
-      case pieces.wQ||pieces.bQ:
+      case pieces.wQ:
+      case pieces.bQ:
         if(validMovePiece(pieces.bB)||validMovePiece(pieces.bR)){
           return true;
         }
       return false;
   
       case pieces.wP:
-        return true;
-      break;
+        output=false;
+        if(p1[0]+1==p2[0]){
+          if(p2[1]==p1[1]){
+            if(pieceLocation[p2[0]][p2[1]]==pieces.empty){
+              output=true;
+            }
+          }
+          if(p2[1]==p1[1]-1||p2[1]==p1[1]+1){
+            if(pieceLocation[p2[0]][p2[1]]>5){
+              output=true;
+            }
+          }
+        }
+      
+        if(p1[0]==1){
+          if(p1[0]+2==p2[0]){
+            if(p2[1]==p1[1]){
+              if(pieceLocation[p2[0]][p2[1]]==pieces.empty&&pieceLocation[p2[0]-1][p2[1]]==pieces.empty){
+                output=true;
+              }
+            }
+          }
+        }
+        console.log(p2[0]);
+        if(output&&p2[0]==7){
+          pieceLocation[p1[0]][p1[1]]=pieces.wQ;
+        }
+        return output;
   
       case pieces.bP:
-        return true;
-      break;
+        output=false;
+        if(p1[0]-1==p2[0]){
+          if(p2[1]==p1[1]){
+            if(pieceLocation[p2[0]][p2[1]]==pieces.empty){
+              output=true;
+            }
+          }
+          if(p2[1]==p1[1]-1||p2[1]==p1[1]+1){
+            if(pieceLocation[p2[0]][p2[1]]<6&&pieceLocation[p2[0]][p2[1]]!=pieces.empty){
+              output=true;
+            }
+          }
+        }
+      
+        if(p1[0]==6){
+          if(p1[0]-2==p2[0]){
+            if(p2[1]==p1[1]){
+              if(pieceLocation[p2[0]][p2[1]]==pieces.empty&&pieceLocation[p2[0]+1][p2[1]]==pieces.empty){
+                output=true;
+              }
+            }
+          }
+        }
+        if(output&&p2[0]==0){
+          pieceLocation[p1[0]][p1[1]]=pieces.bQ;
+        }
+        return output;
   
       case pieces.empty:
         return false;
