@@ -3,10 +3,11 @@
 }
 
 .container {
-  display: flex;
   justify-content: center;
   position: relative;
   margin: auto;
+  display: inline-block;
+  left: 25%;
 }
 
 .header { 
@@ -16,10 +17,9 @@
   text-align: center;
 }
 .column{
-  float:left;
-  position: absolute;
-  top: 50px;
-  left: 0px;
+  display: relative;
+  padding: 0;
+  float: left;
 }
 .chessboard {
     width: 800px;
@@ -62,4 +62,11 @@
 
   .black {
     background-color: #b58863;
+  }
+
+  dialog{
+    position: absolute;
+    left: 45%;
+    top: 45%;
+    z-index: 10;
   }
