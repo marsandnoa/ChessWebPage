@@ -1,6 +1,7 @@
 // Send a GET request using the fetch API
-function getGame(gameName){
-    fetch('http://localhost:8080/api/'+gameName)
+function getGame(){
+    console.log('getGame() function is being called'); 
+    fetch('http://localhost:8080/findall')
     .then(response => {
         // Check if the response status is in the successful range
         if (!response.ok) {
@@ -18,4 +19,6 @@ function getGame(gameName){
         // Handle errors here
         console.error('Fetch error:', error);
     });
-    }
+}
+
+getGame();
