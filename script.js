@@ -31,9 +31,9 @@ const colors={
 }
 
 //this is the starting state for the board
-const boardStart = [[pieces.wR,pieces.wN,pieces.wB,pieces.wK,pieces.wQ,pieces.wB,pieces.wN,pieces.wR],[pieces.wP,pieces.wP,pieces.wP,pieces.wP,pieces.wP,pieces.wP,pieces.wP,pieces.wP],
+const boardStart = [[pieces.bR,pieces.bN,pieces.bB,pieces.bK,pieces.bQ,pieces.bB,pieces.bK,pieces.bR],[pieces.bP,pieces.bP,pieces.bP,pieces.bP,pieces.bP,pieces.bP,pieces.bP,pieces.bP],
 [pieces.empty,pieces.empty,pieces.empty,pieces.empty,pieces.empty,pieces.empty,pieces.empty,pieces.empty],[pieces.empty,pieces.empty,pieces.empty,pieces.empty,pieces.empty,pieces.empty,pieces.empty,pieces.empty],[pieces.empty,pieces.empty,pieces.empty,pieces.empty,pieces.empty,pieces.empty,pieces.empty,pieces.empty],[pieces.empty,pieces.empty,pieces.empty,pieces.empty,pieces.empty,pieces.empty,pieces.empty,pieces.empty],
-[pieces.bP,pieces.bP,pieces.bP,pieces.bP,pieces.bP,pieces.bP,pieces.bP,pieces.bP],[pieces.bR,pieces.bN,pieces.bB,pieces.bK,pieces.bQ,pieces.bB,pieces.bN,pieces.bR]];
+[pieces.wP,pieces.wP,pieces.wP,pieces.wP,pieces.wP,pieces.wP,pieces.wP,pieces.wP],[pieces.wR,pieces.wN,pieces.wB,pieces.wK,pieces.wQ,pieces.wB,pieces.wN,pieces.wR]];
 
 //p1 refers to the square the piece to move is on, p2 refers to the square its moving to
 //this was probably a mistake to do it this way
@@ -319,7 +319,7 @@ function isValidMove(pieceType){
     //  1.2 capture forward
     //2.double move
     //3.ending on final rank
-    case pieces.wP:
+    case pieces.bP:
       output=false;
       if(p1[0]+1==p2[0]){
         if(p2[1]==p1[1]){
@@ -348,7 +348,7 @@ function isValidMove(pieceType){
       }
       return output;
 
-    case pieces.bP:
+    case pieces.wP:
       output=false;
       if(p1[0]-1==p2[0]){
         if(p2[1]==p1[1]){
