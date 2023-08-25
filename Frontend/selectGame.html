@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Game Data</title>
+    <link rel="stylesheet" href="stylingSelect.css">
+</head>
+<body>
+    <h1>Game Data</h1>
+    
+    <form id="gameSelectForm" action="gameReview.html">
+        <input type="hidden" id="selectedGameIndex" name="selectedGameIndex">
+        <label for="gameSelect">Select a Game:</label>
+        <select id="gameSelect" name="gameSelect">
+        </select>
+        <button type="submit">Submit</button>
+    </form>
+    
+    <table id="gameTable">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+
+    <script type="module" src="displayGames.js"></script>
+</body>
+</html>

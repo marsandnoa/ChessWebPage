@@ -1,3 +1,18 @@
+const urlParams = new URLSearchParams(window.location.search);
+const selectedGameIndex = urlParams.get('selectedGameIndex');
+let selectedGame;
+
+if (selectedGameIndex !== null) {
+  fetch(`http://localhost:8080/findall`)
+    .then(response => response.json())
+    .then(data => {
+      selectedGame = data[selectedGameIndex]; 
+    })
+    .catch(error => {
+      console.error('Error:', error);
+    });
+}
+
 const board = document.getElementById("board");
 
 const checkMateText = document.getElementById("endGame");
@@ -39,6 +54,10 @@ const boardStart = [[pieces.bR,pieces.bN,pieces.bB,pieces.bK,pieces.bQ,pieces.bB
 //this was probably a mistake to do it this way
 let p1=[-1,-1];
 let p2=[-1,-1];
+
+
+let currentTurn=colors.white;
+let firstMoveMade=false;
 
 //binding reset to the "r" key
 document.onkeyup = function(e) {
@@ -167,10 +186,10 @@ function move(i,j){
 function movePiece(){
 
   if(isDifColor()&&isValidMove(pieceLocation[p1[0]][p1[1]])){
-    temp1=[p1[0],p1[1]];
-    temp2=[p2[0],p2[1]];
-    tempPiece1=pieceLocation[p1[0]][p1[1]];
-    tempPiece2=pieceLocation[p2[0]][p2[1]];
+    let temp1=[p1[0],p1[1]];
+    let temp2=[p2[0],p2[1]];
+    let tempPiece1=pieceLocation[p1[0]][p1[1]];
+    let tempPiece2=pieceLocation[p2[0]][p2[1]];
 
     pieceLocation[p2[0]][p2[1]]=pieceLocation[p1[0]][p1[1]];
     pieceLocation[p1[0]][p1[1]]=pieces.empty;
@@ -206,6 +225,7 @@ function isDifColor(){
 //most of the pieces have the same move rule,regardless of color, except pawns
 
 function isValidMove(pieceType){
+    let output=true;
   switch(pieceType){
     case pieces.wR:
     case pieces.bR:
@@ -357,7 +377,7 @@ function isValidMove(pieceType){
           }
         }
         if(p2[1]==p1[1]-1||p2[1]==p1[1]+1){
-          if(pieceLocation[p2[0]][p2[1]]>5){
+            if(pieceLocation[p2[0]][p2[1]]>5){
             output=true;
           }
         }
@@ -393,8 +413,13 @@ function getColor(piece) {
 //works by locating the king of the given color, then looping through the entire board 
 //until a piece has a valid move to capture the king
 function isKingInCheck(color) {
-  temp1=[p1[0],p1[1]];
-  temp2=[p2[0],p2[1]];
+  let kingPiece;
+  let opposingColor;
+  let kingPosition;
+  let isKingInCheck;
+
+  let temp1=[p1[0],p1[1]];
+  let temp2=[p2[0],p2[1]];
   if (color === colors.white) {
     kingPiece = pieces.wK;
     opposingColor = colors.black;
