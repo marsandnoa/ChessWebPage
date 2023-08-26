@@ -1,7 +1,39 @@
+//setting up html elements and event listeners
 const board = document.getElementById("board");;
 document.getElementById('resetButton').addEventListener('click', resetBoard);
 const checkMateText = document.getElementById("endGame");
+const openDialogButton = document.getElementById('saveButton');
+const stringInputDialog = document.getElementById('saveDialog');
+const inputForm = document.getElementById('inputForm');
+openDialogButton.addEventListener('click', () => {
+  stringInputDialog.showModal();
+});
+inputForm.addEventListener('submit', (event) => {
+  event.preventDefault();
+  
+  const name = document.getElementById('input1').value;
+  const url = 'http://localhost:8080/new'; 
+  const data = {
+    name: name,
+    moves: movelist
+  };
+console.log(JSON.stringify(data));
+  fetch(url, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(data)
+  })
+  stringInputDialog.close();
+});
+
+//movelist of all moves so far
 let movelist=[];
+//whose turn it is
+let currentTurn;
+//is false if someone hasnt selected the square to move from
+let firstMoveMade=false;
 //visual representation of board
 const chessboard = [[],[],[],[],[],[],[],[]];
 //board data representation
@@ -31,9 +63,9 @@ const colors={
 }
 
 //this is the starting state for the board
-const boardStart = [[pieces.bR,pieces.bN,pieces.bB,pieces.bK,pieces.bQ,pieces.bB,pieces.bK,pieces.bR],[pieces.bP,pieces.bP,pieces.bP,pieces.bP,pieces.bP,pieces.bP,pieces.bP,pieces.bP],
+const boardStart = [[pieces.bR,pieces.bN,pieces.bB,pieces.bQ,pieces.bK,pieces.bB,pieces.bN,pieces.bR],[pieces.bP,pieces.bP,pieces.bP,pieces.bP,pieces.bP,pieces.bP,pieces.bP,pieces.bP],
 [pieces.empty,pieces.empty,pieces.empty,pieces.empty,pieces.empty,pieces.empty,pieces.empty,pieces.empty],[pieces.empty,pieces.empty,pieces.empty,pieces.empty,pieces.empty,pieces.empty,pieces.empty,pieces.empty],[pieces.empty,pieces.empty,pieces.empty,pieces.empty,pieces.empty,pieces.empty,pieces.empty,pieces.empty],[pieces.empty,pieces.empty,pieces.empty,pieces.empty,pieces.empty,pieces.empty,pieces.empty,pieces.empty],
-[pieces.wP,pieces.wP,pieces.wP,pieces.wP,pieces.wP,pieces.wP,pieces.wP,pieces.wP],[pieces.wR,pieces.wN,pieces.wB,pieces.wK,pieces.wQ,pieces.wB,pieces.wN,pieces.wR]];
+[pieces.wP,pieces.wP,pieces.wP,pieces.wP,pieces.wP,pieces.wP,pieces.wP,pieces.wP],[pieces.wR,pieces.wN,pieces.wB,pieces.wQ,pieces.wK,pieces.wB,pieces.wN,pieces.wR]];
 
 //p1 refers to the square the piece to move is on, p2 refers to the square its moving to
 //this was probably a mistake to do it this way
@@ -85,7 +117,7 @@ function resetBoard(){
 }
 
 //function to convert board data representation to visual representation
-function updateBoard() {
+export function updateBoard() {
   for (let i = 0; i < 8; i++) {
     for (let j = 0; j < 8; j++) {
       switch (pieceLocation[i][j]) {
@@ -133,37 +165,6 @@ function updateBoard() {
   }
 };
 
-const openDialogButton = document.getElementById('saveButton');
-const stringInputDialog = document.getElementById('saveDialog');
-const inputForm = document.getElementById('inputForm');
-
-openDialogButton.addEventListener('click', () => {
-  stringInputDialog.showModal();
-});
-
-inputForm.addEventListener('submit', (event) => {
-  event.preventDefault();
-  
-  const name = document.getElementById('input1').value;
-  
-  // Do something with the input values, e.g., display them
-  const url = 'http://localhost:8080/new'; // Replace with your API URL
-  const data = {
-    name: name,
-    moves: movelist
-  };
-console.log(JSON.stringify(data));
-  fetch(url, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify(data)
-  })
-  // Close the dialog
-  stringInputDialog.close();
-});
-
 //primary function, is bound to onclick of each square element, first click just records the square clicked, the second click 
 //calls movePiece, which handles checking whether the move is valid or not,
 function move(i,j){
@@ -189,7 +190,6 @@ function move(i,j){
 
     p2[0]=i;
     p2[1]=j;
-    movelist.push(String(p1[0])+String(p1[1])+String(p2[0])+String(p2[1]));
     console.log(movelist);
     movePiece();
   }
@@ -201,10 +201,10 @@ function move(i,j){
 function movePiece(){
 
   if(isDifColor()&&isValidMove(pieceLocation[p1[0]][p1[1]])){
-    temp1=[p1[0],p1[1]];
-    temp2=[p2[0],p2[1]];
-    tempPiece1=pieceLocation[p1[0]][p1[1]];
-    tempPiece2=pieceLocation[p2[0]][p2[1]];
+    let temp1=[p1[0],p1[1]];
+    let temp2=[p2[0],p2[1]];
+    let tempPiece1=pieceLocation[p1[0]][p1[1]];
+    let tempPiece2=pieceLocation[p2[0]][p2[1]];
 
     pieceLocation[p2[0]][p2[1]]=pieceLocation[p1[0]][p1[1]];
     pieceLocation[p1[0]][p1[1]]=pieces.empty;
@@ -217,7 +217,7 @@ function movePiece(){
       pieceLocation[p2[0]][p2[1]]=tempPiece2;
       return;
     }
-
+    movelist.push(String(p1[0])+String(p1[1])+String(p2[0])+String(p2[1]));
     if(currentTurn==colors.white){
       currentTurn=colors.black;
     }else{
@@ -240,6 +240,8 @@ function isDifColor(){
 //most of the pieces have the same move rule,regardless of color, except pawns
 
 function isValidMove(pieceType){
+  let output=false;
+  let i;
   switch(pieceType){
     case pieces.wR:
     case pieces.bR:
@@ -295,6 +297,8 @@ function isValidMove(pieceType){
 
     case pieces.wB:
     case pieces.bB:
+      let incrementX;
+      let incrementY;
       //if the change in columns is equal to the change in rows,then the piece
       //is moving diagonally
       if(Math.abs(p2[0]-p1[0])==Math.abs(p2[1]-p1[1])){
@@ -427,8 +431,11 @@ function getColor(piece) {
 //works by locating the king of the given color, then looping through the entire board 
 //until a piece has a valid move to capture the king
 function isKingInCheck(color) {
-  temp1=[p1[0],p1[1]];
-  temp2=[p2[0],p2[1]];
+  let temp1=[p1[0],p1[1]];
+  let temp2=[p2[0],p2[1]];
+  let kingPiece;
+  let opposingColor;
+  let kingPosition;
   if (color === colors.white) {
     kingPiece = pieces.wK;
     opposingColor = colors.black;
@@ -475,8 +482,10 @@ function isCheckMate(color) {
   if(!isKingInCheck(color)){
     return;
   }
-  temp1=[p1[0],p1[1]];
-  temp2=[p2[0],p2[1]];
+  let temp1=[p1[0],p1[1]];
+  let temp2=[p2[0],p2[1]];
+  let tempPiece1;
+  let tempPiece2;
   for (let k = 0; k < 8; k++) {
     for (let l = 0; l < 8; l++) {
       if(getColor(pieceLocation[k][l])==color){

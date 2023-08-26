@@ -1,5 +1,5 @@
-import { findAll } from "./api.js";
 
+//js to populate table from api request
 function displayGames(games) {
     const tableBody = document.getElementById('gameTable').getElementsByTagName('tbody')[0];
     tableBody.innerHTML = '';
@@ -28,10 +28,16 @@ function displayGames(games) {
     });
 }
 
-findAll()
+fetch('http://localhost:8080/findall')
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        return response.json(); // Parse the response JSON
+    })
     .then(data => {
-        displayGames(data);
+        displayGames(data); // Call displayGames after fetching data
     })
     .catch(error => {
-        console.error('Error:', error);
+        console.error('Fetch error:', error);
     });

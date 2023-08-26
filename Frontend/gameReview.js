@@ -1,5 +1,6 @@
 document.getElementById('reverseButton').addEventListener('click', reversemove);
 document.getElementById('forwardButton').addEventListener('click', forwardmove);
+
 const urlParams = new URLSearchParams(window.location.search);
 let selectedGameIndex = urlParams.get('selectedGameIndex');
 let selectedGame;
@@ -52,42 +53,6 @@ const pieces = {
   empty:'e'
 }
 
-//enum for the colors/players
-const colors={
-  black:'black',
-  white:'white'
-}
-
-//this is the starting state for the board
-const boardStart = [[pieces.bR,pieces.bN,pieces.bB,pieces.bK,pieces.bQ,pieces.bB,pieces.bK,pieces.bR],[pieces.bP,pieces.bP,pieces.bP,pieces.bP,pieces.bP,pieces.bP,pieces.bP,pieces.bP],
-[pieces.empty,pieces.empty,pieces.empty,pieces.empty,pieces.empty,pieces.empty,pieces.empty,pieces.empty],[pieces.empty,pieces.empty,pieces.empty,pieces.empty,pieces.empty,pieces.empty,pieces.empty,pieces.empty],[pieces.empty,pieces.empty,pieces.empty,pieces.empty,pieces.empty,pieces.empty,pieces.empty,pieces.empty],[pieces.empty,pieces.empty,pieces.empty,pieces.empty,pieces.empty,pieces.empty,pieces.empty,pieces.empty],
-[pieces.wP,pieces.wP,pieces.wP,pieces.wP,pieces.wP,pieces.wP,pieces.wP,pieces.wP],[pieces.wR,pieces.wN,pieces.wB,pieces.wK,pieces.wQ,pieces.wB,pieces.wN,pieces.wR]];
-
-for (let i = 0; i < 8; i++) {
-  for (let j = 0; j < 8; j++) {
-    pieceLocation[i][j]=boardStart[i][j];
-  }
-}
-
-//p1 refers to the square the piece to move is on, p2 refers to the square its moving to
-//this was probably a mistake to do it this way
-let p1=[-1,-1];
-let p2=[-1,-1];
-
-
-//generating board
-for (let i = 0; i < 8; i++) {
-  for (let j = 0; j < 8; j++) {
-    const square = document.createElement("body");
-    square.className = (i + j) % 2 === 0 ? "square white" : "square black";
-    square.setAttribute("data-row", i);
-    square.setAttribute("data-col", j);
-    chessboard[i].push(square);
-    board.appendChild(square);
-  }
-}
-
-//function to convert board data representation to visual representation
 function updateBoard() {
   for (let i = 0; i < 8; i++) {
     for (let j = 0; j < 8; j++) {
@@ -136,8 +101,42 @@ function updateBoard() {
   }
 };
 
-//primary function, is bound to onclick of each square element, first click just records the square clicked, the second click 
-//calls movePiece, which handles checking whether the move is valid or not,
+//enum for the colors/players
+const colors={
+  black:'black',
+  white:'white'
+}
+
+//this is the starting state for the board
+const boardStart = [[pieces.bR,pieces.bN,pieces.bB,pieces.bQ,pieces.bK,pieces.bB,pieces.bK,pieces.bR],[pieces.bP,pieces.bP,pieces.bP,pieces.bP,pieces.bP,pieces.bP,pieces.bP,pieces.bP],
+[pieces.empty,pieces.empty,pieces.empty,pieces.empty,pieces.empty,pieces.empty,pieces.empty,pieces.empty],[pieces.empty,pieces.empty,pieces.empty,pieces.empty,pieces.empty,pieces.empty,pieces.empty,pieces.empty],[pieces.empty,pieces.empty,pieces.empty,pieces.empty,pieces.empty,pieces.empty,pieces.empty,pieces.empty],[pieces.empty,pieces.empty,pieces.empty,pieces.empty,pieces.empty,pieces.empty,pieces.empty,pieces.empty],
+[pieces.wP,pieces.wP,pieces.wP,pieces.wP,pieces.wP,pieces.wP,pieces.wP,pieces.wP],[pieces.wR,pieces.wN,pieces.wB,pieces.wQ,pieces.wK,pieces.wB,pieces.wN,pieces.wR]];
+
+for (let i = 0; i < 8; i++) {
+  for (let j = 0; j < 8; j++) {
+    pieceLocation[i][j]=boardStart[i][j];
+  }
+}
+
+//p1 refers to the square the piece to move is on, p2 refers to the square its moving to
+//this was probably a mistake to do it this way
+let p1=[-1,-1];
+let p2=[-1,-1];
+
+
+//generating board
+for (let i = 0; i < 8; i++) {
+  for (let j = 0; j < 8; j++) {
+    const square = document.createElement("body");
+    square.className = (i + j) % 2 === 0 ? "square white" : "square black";
+    square.setAttribute("data-row", i);
+    square.setAttribute("data-col", j);
+    chessboard[i].push(square);
+    board.appendChild(square);
+  }
+}
+
+//performs the next move
 function forwardmove(i,j){
   let moveset=String(selectedGame.moves[moveIndex]);
   p1[0]=parseInt(moveset.charAt(0));
@@ -147,7 +146,7 @@ function forwardmove(i,j){
   movePiece();
   moveIndex++;
 }
-
+//reverse the previous move
 function reversemove(i,j){
   moveIndex--;
   console.log(moveIndex)
@@ -159,9 +158,7 @@ function reversemove(i,j){
   movePiece();
 }
 
-//this checks if the move results in a valid board state(e.g, check, checkmate)
-//if valid, the function moves the pieces
-//because of the scope of p1 and p2, they must be restored(this was probably a mistake)
+//moves piece 
 function movePiece(){
   pieceLocation[p2[0]][p2[1]]=pieceLocation[p1[0]][p1[1]];
   pieceLocation[p1[0]][p1[1]]=pieces.empty;
