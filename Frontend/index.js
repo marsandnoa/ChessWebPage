@@ -190,7 +190,6 @@ function move(i,j){
 
     p2[0]=i;
     p2[1]=j;
-    console.log(movelist);
     movePiece();
   }
 }
@@ -486,6 +485,8 @@ function isCheckMate(color) {
   let temp2=[p2[0],p2[1]];
   let tempPiece1;
   let tempPiece2;
+  let output=true;
+
   for (let k = 0; k < 8; k++) {
     for (let l = 0; l < 8; l++) {
       if(getColor(pieceLocation[k][l])==color){
@@ -501,11 +502,7 @@ function isCheckMate(color) {
             pieceLocation[p1[0]][p1[1]]=pieces.empty;
 
             if(!isKingInCheck(color)){
-              p1=temp1;
-              p2=temp2;
-              pieceLocation[p2[0]][p2[1]]=tempPiece2;
-              pieceLocation[p1[0]][p1[1]]=tempPiece1;
-              return false;
+              output=false;
             }
             pieceLocation[p2[0]][p2[1]]=tempPiece2;
             pieceLocation[p1[0]][p1[1]]=tempPiece1;
@@ -516,10 +513,8 @@ function isCheckMate(color) {
   }
   p1=temp1;
   p2=temp2;
-  pieceLocation[p2[0]][p2[1]]=tempPiece2;
-  pieceLocation[p1[0]][p1[1]]=tempPiece1;
   
-  return true;
+  return output;
 }
 resetBoard();
 updateBoard();
