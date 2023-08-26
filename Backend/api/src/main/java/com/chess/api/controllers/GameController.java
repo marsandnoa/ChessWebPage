@@ -28,7 +28,7 @@ public class GameController {
         return this.GameServ.getAllGames();
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/findid/{id}")
     public Game findGameById(@PathVariable String id) {
         return this.GameServ.getGameById(id);
     }

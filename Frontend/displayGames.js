@@ -12,17 +12,18 @@ function displayGames(games) {
         const idCell = row.insertCell(0);
         const nameCell = row.insertCell(1);
 
-        idCell.textContent = index;
+        idCell.textContent = index+1;
         nameCell.textContent = game.name;
 
         const option = document.createElement('option');
         option.value = index;
-        option.textContent = `Game ${index}`;
+        option.textContent = `Game ${index+1}`;
         gameSelect.appendChild(option);
     });
 
     gameSelect.addEventListener('change', (event) => {
-        const selectedGameIndex = event.target.value;
+        let selectedGameIndex = event.target.value;
+        selectedGameIndex=parseInt(selectedGameIndex)+1;
         document.getElementById('selectedGameIndex').value = selectedGameIndex;
     });
 }

@@ -3,10 +3,12 @@ const selectedGameIndex = urlParams.get('selectedGameIndex');
 let selectedGame;
 
 if (selectedGameIndex !== null) {
-  fetch(`http://localhost:8080/findall`)
+  console.log(selectedGameIndex);
+  fetch(`http://localhost:8080/findid/`+selectedGameIndex)
     .then(response => response.json())
     .then(data => {
-      selectedGame = data[selectedGameIndex]; 
+      selectedGame = data;
+      console.log(data);
     })
     .catch(error => {
       console.error('Error:', error);
