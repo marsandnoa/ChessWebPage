@@ -1,7 +1,7 @@
-const board = document.getElementById("board");
-
+const board = document.getElementById("board");;
+document.getElementById('resetButton').addEventListener('click', resetBoard);
 const checkMateText = document.getElementById("endGame");
-
+let movelist=[];
 //visual representation of board
 const chessboard = [[],[],[],[],[],[],[],[]];
 //board data representation
@@ -72,6 +72,7 @@ function resetBoard(){
       pieceLocation[i][j]=boardStart[i][j];
     }
   }
+  movelist=[];
   currentTurn=colors.white;
   firstMoveMade=false;
   checkMateText.open=false;
@@ -132,6 +133,37 @@ function updateBoard() {
   }
 };
 
+const openDialogButton = document.getElementById('saveButton');
+const stringInputDialog = document.getElementById('saveDialog');
+const inputForm = document.getElementById('inputForm');
+
+openDialogButton.addEventListener('click', () => {
+  stringInputDialog.showModal();
+});
+
+inputForm.addEventListener('submit', (event) => {
+  event.preventDefault();
+  
+  const name = document.getElementById('input1').value;
+  
+  // Do something with the input values, e.g., display them
+  const url = 'http://localhost:8080/new'; // Replace with your API URL
+  const data = {
+    name: name,
+    moves: movelist
+  };
+console.log(JSON.stringify(data));
+  fetch(url, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(data)
+  })
+  // Close the dialog
+  stringInputDialog.close();
+});
+
 //primary function, is bound to onclick of each square element, first click just records the square clicked, the second click 
 //calls movePiece, which handles checking whether the move is valid or not,
 function move(i,j){
@@ -157,6 +189,8 @@ function move(i,j){
 
     p2[0]=i;
     p2[1]=j;
+    movelist.push(String(p1[0])+String(p1[1])+String(p2[0])+String(p2[1]));
+    console.log(movelist);
     movePiece();
   }
 }

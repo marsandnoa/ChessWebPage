@@ -19,7 +19,7 @@ public class Game {
     @Column(name = "name")
     private String name;
     @Column(name = "moves")
-    private List<Integer> moves;
+    private List<String> moves;
 
     public String getName() {
         return this.name;
@@ -29,18 +29,18 @@ public class Game {
         this.name = name;
     }
 
-    public List<Integer> getMoves() {
+    public List<String> getMoves() {
         return this.moves;
     }
 
-    public void setMoves(List<Integer> moves) {
+    public void setMoves(List<String> moves) {
         this.moves = moves;
     }
 
     public Game() {
     }
 
-    public Game(String name, List<Integer> moves) {
+    public Game(String name, List<String> moves) {
         this.name = name;
         this.moves = moves;
     }
