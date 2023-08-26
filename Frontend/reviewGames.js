@@ -1,28 +1,30 @@
-
+document.getElementById('reverseButton').addEventListener('click', reversemove);
+document.getElementById('forwardButton').addEventListener('click', forwardmove);
 const urlParams = new URLSearchParams(window.location.search);
 let selectedGameIndex = urlParams.get('selectedGameIndex');
-if(selectedGameIndex==""){
-  selectedGameIndex="1";
-}
 let selectedGame;
-
+let moveIndex=0;
 if (selectedGameIndex !== null) {
   console.log(selectedGameIndex);
-  fetch(`http://localhost:8080/findid/`+selectedGameIndex)
+  if(selectedGameIndex==""){
+    selectedGameIndex=1;
+  }
+  fetch(`http://localhost:8080/findid/` + selectedGameIndex)
     .then(response => response.json())
     .then(data => {
       selectedGame = data;
       console.log(data);
-      document.addEventListener("DOMContentLoaded", function() {
-        var newHeaderText = selectedGame.name; // Replace with your desired value
-        var headerElement = document.querySelector('.header');
-        headerElement.textContent = newHeaderText;
-      });
+      
+      // Update header text with fetched data
+      var newHeaderText = selectedGame.name;
+      var headerElement = document.querySelector('.header');
+      headerElement.textContent = newHeaderText;
     })
     .catch(error => {
       console.error('Error:', error);
     });
 }
+
 
 
 
@@ -80,13 +82,7 @@ for (let i = 0; i < 8; i++) {
     square.className = (i + j) % 2 === 0 ? "square white" : "square black";
     square.setAttribute("data-row", i);
     square.setAttribute("data-col", j);
-    square.addEventListener("click",
-        function(){
-          move(i,j),false;
-        }
-      );
-    
-      chessboard[i].push(square);
+    chessboard[i].push(square);
     board.appendChild(square);
   }
 }
@@ -142,16 +138,25 @@ function updateBoard() {
 
 //primary function, is bound to onclick of each square element, first click just records the square clicked, the second click 
 //calls movePiece, which handles checking whether the move is valid or not,
-function move(i,j){
-  if(!firstMoveMade){
-    p1[0]=i;
-    p1[1]=j;
-    firstMoveMade=true;
-  }else{
-    p2[0]=i;
-    p2[1]=j;
-    movePiece();
-  }
+function forwardmove(i,j){
+  let moveset=String(selectedGame.moves[moveIndex]);
+  p1[0]=parseInt(moveset.charAt(0));
+  p1[1]=parseInt(moveset.charAt(1));
+  p2[0]=parseInt(moveset.charAt(2));
+  p2[1]=parseInt(moveset.charAt(3));
+  movePiece();
+  moveIndex++;
+}
+
+function reversemove(i,j){
+  moveIndex--;
+  console.log(moveIndex)
+  let moveset=String(selectedGame.moves[moveIndex]);
+  p1[0]=parseInt(moveset.charAt(2));
+  p1[1]=parseInt(moveset.charAt(3));
+  p2[0]=parseInt(moveset.charAt(0));
+  p2[1]=parseInt(moveset.charAt(1));
+  movePiece();
 }
 
 //this checks if the move results in a valid board state(e.g, check, checkmate)

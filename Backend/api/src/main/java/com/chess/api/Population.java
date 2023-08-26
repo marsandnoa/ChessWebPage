@@ -1,6 +1,8 @@
 package com.chess.api;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -17,9 +19,10 @@ public class Population implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
 
-        Game game1 = new Game("Fischer", "Kasparov");
-        Game game2 = new Game("Magnus", "Anand");
-
+        List<Integer> moves = new ArrayList<Integer>();
+        moves.add(1112);
+        Game game1 = new Game("Fischer", moves);
+        Game game2 = new Game("anand", moves);
         gameRepository.saveAll(Arrays.asList(game1, game2));
     }
 }

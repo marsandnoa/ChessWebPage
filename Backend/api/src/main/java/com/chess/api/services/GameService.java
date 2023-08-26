@@ -22,7 +22,7 @@ public class GameService {
         return gameRepository.findAll();
     }
 
-    public Game getGameById(String id) {
+    public Game getGameById(Integer id) {
         Optional<Game> Game = gameRepository.findById(id);
         if (Game.isPresent()) {
             return Game.get();
@@ -30,7 +30,7 @@ public class GameService {
         return null;
     }
 
-    public boolean deleteGameById(String id) {
+    public boolean deleteGameById(Integer id) {
         if (gameRepository.existsById(id)) {
             gameRepository.deleteById(id);
             return true;

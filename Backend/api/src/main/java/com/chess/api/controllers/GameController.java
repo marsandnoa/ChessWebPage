@@ -29,12 +29,12 @@ public class GameController {
     }
 
     @GetMapping("/findid/{id}")
-    public Game findGameById(@PathVariable String id) {
+    public Game findGameById(@PathVariable Integer id) {
         return this.GameServ.getGameById(id);
     }
 
     @DeleteMapping("/delete/{id}")
-    public void removeGame(@PathVariable String id) {
+    public void removeGame(@PathVariable Integer id) {
         this.GameServ.deleteGameById(id);
     }
 }
