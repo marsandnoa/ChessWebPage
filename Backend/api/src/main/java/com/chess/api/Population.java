@@ -20,7 +20,7 @@ public class Population implements CommandLineRunner {
     public void run(String... args) throws Exception {
 
         List<String> moves = new ArrayList<String>();
-        moves.add("1112");
+        moves.add("1121");
         Game game1 = new Game("Fischer", moves);
         Game game2 = new Game("anand", moves);
         gameRepository.saveAll(Arrays.asList(game1, game2));

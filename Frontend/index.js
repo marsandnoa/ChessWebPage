@@ -117,7 +117,7 @@ function resetBoard(){
 }
 
 //function to convert board data representation to visual representation
-export function updateBoard() {
+function updateBoard() {
   for (let i = 0; i < 8; i++) {
     for (let j = 0; j < 8; j++) {
       switch (pieceLocation[i][j]) {
