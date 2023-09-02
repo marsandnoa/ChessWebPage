@@ -1,21 +1,11 @@
 <!DOCTYPE html>
 <html>
 <head>
+  <meta charset="UTF-8">
   <link rel="stylesheet" href="styling.css">
 </head>
-<dialog id="endGame" class="endGame">
-  <p>Checkmate, Press R or button to reset</p>
-</dialog>
-<dialog id="saveDialog">
-  <form id="inputForm">
-    <label for="input1">Name of Game?:</label>
-    <input type="text" id="input1" required><br>
-    <button type="submit">Submit</button>
-  </form>
-</dialog>
 <body>
-  <h1 class="header">Noah's Chess Game
-  </h1>
+  <h1 class="header">Noah's Chess Game</h1>
   <h2 class="header">
     <a href="selectGame.html" class="pageChange">Step Through Past Game?</a>
   </h2>
@@ -24,7 +14,7 @@
     <button id="resetButton">Reset Game</button>
   </h1>
   <div class="container">
-    <div class="column"  >
+    <div class="column">
       <p>8</p>
       <p>7</p>
       <p>6</p>
@@ -35,18 +25,28 @@
       <p>1</p>
       <p></p>
     </div>
-  <div class="chessboard" id="board"></div>
-  <div class="top">
-    <p>A</p>
-    <p>B</p>
-    <p>C</p>
-    <p>D</p>
-    <p>E</p>
-    <p>F</p>
-    <p>G</p>
-    <p>H</p>
+    <div class="chessboard" id="board"></div>
+    <div class="top">
+      <p>A</p>
+      <p>B</p>
+      <p>C</p>
+      <p>D</p>
+      <p>E</p>
+      <p>F</p>
+      <p>G</p>
+      <p>H</p>
+    </div>
   </div>
+  <dialog id="endGame" class="endGame">
+    <p>Checkmate, Press R or button to reset</p>
+  </dialog>
+  <dialog id="saveDialog">
+    <form id="inputForm">
+      <label for="input1">Name of Game?:</label>
+      <input type="text" id="input1" required><br>
+      <button type="submit">Submit</button>
+    </form>
+  </dialog>
   <script src="index.js"></script>
 </body>
-</div>
 </html>
