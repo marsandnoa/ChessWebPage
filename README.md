@@ -1,7 +1,3 @@
-Certainly! Below is the entire content of the README in GitHub-flavored Markdown for the Chess Web Application using Spring Boot, HTML, JavaScript, and Docker:
-
-markdown
-Copy code
 # Chess Web Application
 
 This web application allows users to play chess online and save or review their games. It is built using Spring Boot for the backend and HTML/JavaScript for the frontend.
