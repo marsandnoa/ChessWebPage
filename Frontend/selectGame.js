@@ -28,7 +28,7 @@ function displayGames(games) {
     });
 }
 
-fetch('http://localhost:8080/findall')
+fetch('http://localhost:8079/findall')
     .then(response => {
         if (!response.ok) {
             throw new Error('Network response was not ok');

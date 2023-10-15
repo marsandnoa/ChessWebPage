@@ -10,7 +10,7 @@ if (selectedGameIndex !== null) {
   if(selectedGameIndex==""){
     selectedGameIndex=1;
   }
-  fetch(`http://localhost:8080/findid/` + selectedGameIndex)
+  fetch(`http://localhost:8079/findid/` + selectedGameIndex)
     .then(response => response.json())
     .then(data => {
       selectedGame = data;

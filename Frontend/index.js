@@ -12,7 +12,7 @@ inputForm.addEventListener('submit', (event) => {
   event.preventDefault();
   
   const name = document.getElementById('input1').value;
-  const url = 'http://localhost:8080/new'; 
+  const url = 'http://localhost:8079/new'; 
   const data = {
     name: name,
     moves: movelist
