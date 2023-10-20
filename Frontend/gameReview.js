@@ -108,7 +108,7 @@ const colors={
 }
 
 //this is the starting state for the board
-const boardStart = [[pieces.bR,pieces.bN,pieces.bB,pieces.bQ,pieces.bK,pieces.bB,pieces.bK,pieces.bR],[pieces.bP,pieces.bP,pieces.bP,pieces.bP,pieces.bP,pieces.bP,pieces.bP,pieces.bP],
+const boardStart = [[pieces.bR,pieces.bN,pieces.bB,pieces.bQ,pieces.bK,pieces.bB,pieces.bN,pieces.bR],[pieces.bP,pieces.bP,pieces.bP,pieces.bP,pieces.bP,pieces.bP,pieces.bP,pieces.bP],
 [pieces.empty,pieces.empty,pieces.empty,pieces.empty,pieces.empty,pieces.empty,pieces.empty,pieces.empty],[pieces.empty,pieces.empty,pieces.empty,pieces.empty,pieces.empty,pieces.empty,pieces.empty,pieces.empty],[pieces.empty,pieces.empty,pieces.empty,pieces.empty,pieces.empty,pieces.empty,pieces.empty,pieces.empty],[pieces.empty,pieces.empty,pieces.empty,pieces.empty,pieces.empty,pieces.empty,pieces.empty,pieces.empty],
 [pieces.wP,pieces.wP,pieces.wP,pieces.wP,pieces.wP,pieces.wP,pieces.wP,pieces.wP],[pieces.wR,pieces.wN,pieces.wB,pieces.wQ,pieces.wK,pieces.wB,pieces.wN,pieces.wR]];
 

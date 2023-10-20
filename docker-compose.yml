@@ -3,6 +3,7 @@ services:
   mysql:
     image: mysql:8.0.27
     environment:
+      MYSQL_ROOT_HOST: '%'
       MYSQL_ROOT_PASSWORD: password
       MYSQL_USER: user
       MYSQL_PASSWORD: password
@@ -17,7 +18,7 @@ services:
 
   springboot-app:
     build:
-      context: ./backend/api
+      context: ./Backend/api
       dockerfile: Dockerfile.txt
     ports:
       - "8080:8080"
@@ -34,6 +35,6 @@ services:
       - ./Frontend:/usr/share/nginx/html
       - ./nginx.conf:/etc/nginx/nginx.conf
     ports:
-      - "80:80" 
+      - "1500:80" 
     depends_on:
       - springboot-app
